@@ -20,11 +20,10 @@ int main()
     for (;;) {
         printf("Enter operation code:");
         scanf(" %c", &code);
-        while ((getchar()!='\n') ;
+        while (getchar()!='\n') ;
         switch (code) {
         case 'i':
             insert(inventory, &num_parts);
-            num_parts++;
             break;
         case 's':
             search(inventory, num_parts);
