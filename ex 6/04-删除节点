@@ -24,6 +24,8 @@ struct node *next;
 } GoodsList;
 */
 
+extern int CurrentCnt;
+
 bool delete_item(GoodsList* L, char* goods_id)
 {
     GoodsList *pre = L, *p = L->next;
@@ -36,5 +38,6 @@ bool delete_item(GoodsList* L, char* goods_id)
 
     pre->next = p->next;
     free(p);
+    CurrentCnt--;
     return true;
 }
