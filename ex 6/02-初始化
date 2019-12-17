@@ -25,8 +25,7 @@ typedef struct node {
     struct node* next;
 } GoodsList;
 
-//全局变量，存储当前商品的数量
-int CurrentCnt;
+extern int CurrentCnt;//全局变量，存储当前商品的数量
 
 void init_list(GoodsList** L)
 {
