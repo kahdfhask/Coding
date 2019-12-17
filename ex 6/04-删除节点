@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
+
+#define MAX 100
+#define GOODS_FILE_NAME "goodsinfo.txt"
+
+#define MAX_ID_LEN 30
+#define MAX_NAME_LEN 30
+#define MAX_PRICE_LEN 30
+#define MAX_DISCOUNT_LEN 30
+
+typedef struct {
+	char    goods_id[MAX_ID_LEN];
+	char    goods_name[MAX_NAME_LEN];
+	int     goods_price;
+	char    goods_discount[MAX_DISCOUNT_LEN];
+	int     goods_amount;
+	int     goods_remain;
+} GoodsInfo;
+
+typedef struct node
+{
+	GoodsInfo data;
+	struct node *next;
+} GoodsList;
+
+
+
+//全局变量，存储当前商品的数量
+extern int CurrentCnt;
+bool delete_item(GoodsList *L, char* goods_id) {
+	GoodsList *pre = L, *p = L->next;
+	while (p != NULL && (strcmp(p->data.goods_id, goods_id))) {
+		pre = p;
+		p = p->next;
+	}
+	if (p == NULL) {
+		return false;
+	}
+	else
+	{
+		pre->next = p->next;
+		free(p);
+		CurrentCnt--;
+		return true;
+	}
+}
