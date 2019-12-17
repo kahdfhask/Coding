@@ -1,0 +1,45 @@
+#include "lab52.h" // 请不要删除本行头文件，否则检查不通过
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_ID_LEN 30
+#define MAX_NAME_LEN 30
+#define MAX_PRICE_LEN 3
+#define MAX_DISCOUNT_LEN 30
+/*
+typedef struct {
+char goods_id[MAX_ID_LEN];
+char goods_name[MAX_NAME_LEN];
+int goods_price;
+char goods_discount[MAX_DISCOUNT_LEN];
+int goods_amount;
+int goods_remain;
+} GoodsInfo;
+typedef struct node
+{
+GoodsInfo data;
+struct node *next;
+} GoodsList;
+*/
+extern int CurrentCnt; // 请不要删除本行的全局变量声明，否则检查不通过
+
+bool change_item(GoodsList* L, char* goods_id, GoodsInfo new_info)
+{
+    GoodsList* p = L->next;
+    for (; p != NULL && (strcmp(p->data.goods_id, goods_id));) {
+        p = p->next;
+    }
+    // p = search_item(L, goods_id);
+    if (p == NULL)
+        return false;
+
+    strcpy(p->data.goods_id, new_info.goods_id);
+    strcpy(p->data.goods_name, new_info.goods_name);
+    p->data.goods_price = new_info.goods_price;
+    strcpy(p->data.goods_discount, new_info.goods_discount);
+    p->data.goods_amount = new_info.goods_amount;
+    p->data.goods_remain = new_info.goods_remain;
+
+    return true;
+}
