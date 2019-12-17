@@ -7,7 +7,6 @@
 #define MAX_PRICE_LEN 30
 #define MAX_DISCOUNT_LEN 30
 
-/*
 typedef struct {
 char goods_id[MAX_ID_LEN];
 char goods_name[MAX_NAME_LEN];
@@ -22,7 +21,6 @@ typedef struct node
 GoodsInfo data;
 struct node *next;
 } GoodsList;
-*/
 
 extern int CurrentCnt;
 
