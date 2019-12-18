@@ -1,0 +1,30 @@
+#include "lab52.h" // 请不要删除本行头文件，否则检查不通过
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_ID_LEN 30
+#define MAX_NAME_LEN 30
+#define MAX_PRICE_LEN 30
+#define MAX_DISCOUNT_LEN 30
+/*
+typedef struct {
+char goods_id[MAX_ID_LEN];
+char goods_name[MAX_NAME_LEN];
+int goods_price;
+char goods_discount[MAX_DISCOUNT_LEN];
+int goods_amount;
+int goods_remain;
+} GoodsInfo;
+typedef struct node
+{
+GoodsInfo data;
+struct node *next;
+} GoodsList;
+*/
+extern int CurrentCnt; // 请不要删除本行的全局变量声明，否则检查不通过
+
+void destory_list_and_file(GoodsList** L)
+{
+    destory_list(L);
+    remove(GOODS_FILE_NAME);
+}
