@@ -1,0 +1,112 @@
+#include "lab52.h" // 请不要删除本行头文件，否则检查不通过
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_ID_LEN 30
+#define MAX_NAME_LEN 30
+#define MAX_PRICE_LEN 30
+#define MAX_DISCOUNT_LEN 30
+/*
+typedef struct {
+char goods_id[MAX_ID_LEN];
+char goods_name[MAX_NAME_LEN];
+int goods_price;
+char goods_discount[MAX_DISCOUNT_LEN];
+int goods_amount;
+int goods_remain;
+} GoodsInfo;
+
+typedef struct node
+{
+GoodsInfo data;
+struct node *next;
+} GoodsList;
+
+GoodsInfo read_goods_info();
+void init_list(GoodsList **pL);
+void destory_list(GoodsList **pL);
+void destory_list_and_file(GoodsList **pL);
+int save_to_file(GoodsList *L);
+void output_one_item(GoodsList *L);
+void output_all_items(GoodsList *L);
+bool insert_item(GoodsList *L, GoodsInfo item, int choice);
+bool delete_item(GoodsList *L, char* goods_id);
+GoodsList* search_item(GoodsList *L, char* goods_id);
+bool change_item(GoodsList *L, char* goods_id, GoodsInfo new_info);
+void bubble_sort(GoodsList *L);
+int read_line(char str[], int n);
+*/
+int CurrentCnt ;//全局变量，存储当前商品的数量
+
+int main(void)
+{
+    int choice;
+    int num;
+    char goods_id[MAX_ID_LEN];
+    char goods_name[MAX_NAME_LEN];
+
+    GoodsList *list;
+    GoodsInfo item;
+    init_list(&list);
+
+    while (1){
+        printf("*****************\n\
+  1.显示所有商品的信息\n\
+  2.修改某个商品的信息\n\
+  3.插入某个商品的信息\n\
+  4.删除某个商品的信息\n\
+  5.查找某个商品的信息\n\
+  6.商品存盘并退出系统\n\
+  7.对商品价格进行排序\n\
+  8.(慎用)删除所有内容\n\
+  其他.不存盘并退出系统\n\
+  ********************");
+    printf("Enter operation code:");
+    scanf("%d", &choice);
+    switch (choice) {
+        case 1: 
+            output_all_items(list);
+            break;
+        case 2:
+            item = read_goods_info();
+            printf("请输入要修改信息的商品ID:");
+            read_line(goods_id, MAX_ID_LEN);
+            change_item(list, goods_id, item);
+            break;
+        case 3:
+            item = read_goods_info();
+            int i;
+            printf("请输入数字表明你要插入的商品的位置：\n\
+            0-商品列表尾部\n\
+            1-商品列表头部\n\
+            i-商品列表中间的第i号位置(例如：输入3，应该在第二个节点后插入新节点)\n");
+            scanf("%d", &i);
+            insert_item(list, item, i);
+            break;
+        case 4:
+            printf("请输入要删除信息的商品ID:");
+            read_line(goods_id, MAX_ID_LEN);
+            delete_item(list, goods_id);
+            break;
+        case 5:
+            printf("请输入要查找信息的商品ID:");
+            read_line(goods_id, MAX_ID_LEN);
+            search_item(list, goods_id);
+            break;
+        case 6:
+            num = save_to_file(list);
+            printf("您已存盘并保存了%d条商品信息.\n您已退出了超市商品管理系统.\n", num);
+            return 0;
+        case 7:
+            bubble_sort(list);
+            break;
+        case 8:
+            destory_list_and_file(&list);
+            break;
+        default:
+            printf("您已经退出超市商品管理系统!\n");
+            destory_list(&list);
+            return 0;
+        }
+    }
+}
