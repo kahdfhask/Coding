@@ -1,0 +1,21 @@
+#include "list.h" // 请不要删除，否则检查不通过
+#include <stdio.h>
+#include <stdlib.h>
+
+void del_x2y(SeqList* L, ElemType x, ElemType y)
+{
+    int i, j = 0;
+
+    for (i = 0; i <= L->last;) {
+        if (i + j <= L->last && L->elem[i + j] >= x && L->elem[i + j] <= y) {
+            j++;
+        } else if (i + j <= L->last) {
+            L->elem[i] = L->elem[i + j];
+            i++;
+        } else {
+            L->elem[i++] = 0;
+        }
+    }
+
+    L->last -= j;
+}
