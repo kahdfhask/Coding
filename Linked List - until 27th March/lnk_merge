@@ -1,0 +1,34 @@
+#include "list.h" // 请不要删除，否则检查不通过
+#include <stdio.h>
+#include <stdlib.h>
+
+void lnk_merge(LinkList A, LinkList B, LinkList C)
+{
+    LinkList pa = A->next, pb = B->next, pc;
+    C->next = pa;
+    pc = C->next;
+    pa = pa->next;
+
+    while (pa && pb) {
+        pc->next = pb;
+        pb = pb->next;
+        pc = pc->next;
+        pc->next = pa;
+        pa = pa->next;
+        pc = pc->next;
+    }
+
+    if (pa) {
+        while (pa) {
+            pc->next = pa;
+            pa = pa->next;
+            pc = pc->next;
+        }
+    } else {
+        while (pb) {
+            pc->next = pb;
+            pb = pb->next;
+            pc = pc->next;
+        }
+    }
+}
