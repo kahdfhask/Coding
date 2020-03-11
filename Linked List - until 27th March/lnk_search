@@ -1,0 +1,49 @@
+/*#include "list.h" // 请不要删除，否则检查不通过
+#include <stdio.h>
+#include <stdlib.h>
+
+//solution_1
+int lnk_search(LinkList L, int k, ElemType* p_ele)
+{
+    LinkList p = L->next;
+    int stat, cnt = 0;
+
+    while (cnt - k && p) {
+        p = p->next;
+        k++;
+    }
+
+    if (p) {
+        p_ele = &p->data;
+        stat = 1;
+    } else
+        stat = 0;
+
+    return stat;
+}
+
+//solution_2
+/*
+#include "list.h" // 请不要删除，否则检查不通过
+#include <stdio.h>
+#include <stdlib.h>
+
+int lnk_search(LinkList L, int k, ElemType* p_ele)
+{
+    LinkList p = L->next;
+    LinkList prev = L->next;
+
+    for (; k >= 0 && p; k--, p = p->next)
+        ;
+
+    for (; prev && p; p = p->next, prev = prev->next) {
+        ;
+    }
+
+    if (prev) {
+        p_ele = &prev->data;
+        return 1;
+    } else
+        return 0;
+}
+*/
