@@ -1,0 +1,11 @@
+void reverse(LinkList* L)
+{
+  LinkList *s, *p = L->next;
+  L->next = NULL;
+  while (p != NULL){
+    s = p->next;
+    p->next = L->next;
+    L->next = p;
+    p = r;
+  }
+}
