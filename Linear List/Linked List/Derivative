@@ -1,0 +1,29 @@
+//某一元多项式采用带头结点的单链表存储
+typedef struct Polynode
+{
+	int coef;
+	int exp;
+	struct PolyNode * next;
+} Polynode, *Polylist;
+
+void Derivative(Polynode *PL)
+{
+	Polynode* p = PL;
+
+	//链表为空表
+	if(p == NULL)
+		return;
+
+	//如有常数项，释放该节点
+	if(p->exp == 0){
+		PL->next = p->next;
+		free(p);
+		p = PL->next;
+	}
+
+	while (p!= NULL){
+		p->coef = p->coef * p->exp;
+		p->exp--;
+		p = p->next;
+	}
+}
