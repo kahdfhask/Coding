@@ -6,6 +6,6 @@ void reverse(LinkList* L)
     s = p->next;
     p->next = L->next;
     L->next = p;
-    p = r;
+    p = s;
   }
 }
