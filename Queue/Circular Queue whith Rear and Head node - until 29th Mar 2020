@@ -1,0 +1,57 @@
+#include "list.h" // 请不要删除，否则检查不通过
+#include <stdio.h>
+#include <stdlib.h>
+#define TRUE 1
+#define FALSE 0
+
+// typedef struct _QueueNode {
+//     ElemType data;          /*数据域*/
+// struct _QueueNode* next; /*指针域*/
+// }
+// LinkQueueNode, *LinkQueue;
+
+bool init_queue(LinkQueue* LQ)
+{
+    LinkQueue front;
+    front = (LinkQueue)malloc(sizeof(LinkQueueNode));
+    if (front) {
+        (*LQ) = front;
+        front->next = front;
+        return TRUE;
+    } else
+        return FALSE;
+}
+
+bool enter_queue(LinkQueue* LQ, ElemType x)
+{
+    LinkQueue q;
+    q = (LinkQueue)malloc(sizeof(LinkQueueNode));
+
+    if (q) {
+        q->data = x;
+        q->next = (*LQ)->next;
+        (*LQ)->next = q;
+        (*LQ) = q;
+        return TRUE;
+    } else
+        return FALSE;
+}
+
+bool leave_queue(LinkQueue* LQ, ElemType* x)
+{
+    LinkQueue front = (*LQ)->next;
+    if (front != (*LQ)) { //队列不为空
+        *x = front->next->data;
+        if (front->next == (*LQ)) { //只有一个结点
+            free(front->next);
+            (*LQ) = front;
+            (*LQ)->next = front;
+        } else {
+            front = front->next;
+            (*LQ)->next->next = front->next;
+            free(front);
+        }
+        return TRUE;
+    } else
+        return FALSE;
+}
