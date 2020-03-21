@@ -1,6 +1,7 @@
 #include "list.h" // 请不要删除，否则检查不通过
 #include <stdio.h>
 #include <stdlib.h>
+
 void del_dupnum(SeqList* L)
 {
 
