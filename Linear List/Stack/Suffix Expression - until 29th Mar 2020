@@ -1,0 +1,62 @@
+#include "list.h" // 请不要删除，否则检查不通过
+#include <stdio.h>
+#include <stdlib.h>
+
+//#define Stack_Size 50
+//typedef struct{
+//    ElemType elem[Stack_Size];
+//    int top;
+//}Stack;
+
+//bool push(Stack* S, ElemType x);
+//bool pop(Stack* S, ElemType *x);
+//void init_stack(Stack *S){
+//    S->top = -1;
+//}
+
+int compute_reverse_polish_notation(char* str)
+{
+    ElemType num1, num2, x;
+    int i = 0;
+
+    Stack S;
+    init_stack(&S);
+
+    while (str[i] != '\0') {
+        if (str[i] != ' ') {
+            if (str[i] >= '0' && str[i] <= '9') {
+                x = 0;
+                while (str[i] != ' ') {
+                    x = x * 10 + str[i] - '0';
+                    i++;
+                }
+                push(&S, x);
+            } else {
+                pop(&S, &num2);
+                pop(&S, &num1);
+                switch (str[i]) {
+                case '+':
+                    num1 += num2;
+                    break;
+                case '-':
+                    num1 -= num2;
+                    break;
+                case '*':
+                    num1 *= num2;
+                    break;
+                case '/':
+                    num1 /= num2;
+                    break;
+                case '%':
+                    num1 %= num2;
+                    break;
+                }
+                push(&S, num1);
+            }
+        }
+        i++;
+    }
+
+    pop(&S, &num1);
+    return num1;
+}
