@@ -1,0 +1,34 @@
+#include "dsstring.h" //请不要删除，否则检查不通过
+#include <stdio.h>
+#include <stdlib.h>
+
+int str_compare(const char* ptr1, const char* ptr2)
+{
+    int i, res = 0;
+    for (i = 0; ptr1[i] != '\0' && ptr2[i] != '\0'; i++) {
+        res = ptr1[i] - ptr2[i];
+        if (ptr1[i] >= 'A' && ptr1[i] <= 'Z') {
+            if (ptr2[i] != ptr1[i] && ptr2[i] != ptr1[i] + 32)
+                break;
+            else
+                res = 0;
+        } else if (ptr1[i] >= 'a' && ptr1[i] <= 'z') {
+            if (ptr2[i] != ptr1[i] && ptr2[i] != ptr1[i] - 32)
+                break;
+            else
+                res = 0;
+        } else if (res != 0) //ptr1[i] is num and not equals ptr2[i]
+            break;
+    }
+
+    if (res == 0) { //Two strings are the same till one ends
+        if (ptr1[i] == '\0' && ptr2[i] == '\0')
+            res = 0;
+        else if (ptr1[i])
+            res = 1;
+        else
+            res = -1;
+    }
+
+    return res;
+}
