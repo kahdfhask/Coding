@@ -1,0 +1,91 @@
+/*
+#define BLOCK_SIZE 4    // 可由用户定义的块大小
+#define BLS_BLANK '#'   // 用于空白处的补齐字符
+
+typedef struct _block {
+    char ch[BLOCK_SIZE];    //块的数据域
+    struct _block *next;    //块的指针域
+} Block;
+
+typedef struct {
+    Block *head;        // 串的头指针
+    Block *tail;        // 串的尾指针
+    int len;            // 串的当前长度
+} BLString;
+
+//字符串初始化函数：
+void blstr_init(BLString *T) {
+    T->len = 0;
+    T->head = NULL;
+    T->tail = NULL;
+}
+*/
+
+/**************************************************************************
+ * src为要查找的字符串
+ * pos为子串开始的下标
+ * len为子串的长度
+ * sub在函数调用运行前指向一个已经初始化好的空串
+ * 在函数返回时，sub指向串src从第pos个字符起长度为len的子串
+ * 函数查找成功返回true，参数不正确返回 false 
+**************************************************************************/
+
+#include "dsstring.h" // 请不要删除，否则检查不通过
+#include <stdio.h>
+#include <stdlib.h>
+
+bool blstr_substr(BLString src, int pos, int len, BLString* sub)
+{
+    int start = pos / 4;
+    int i_src = pos % 4;
+    int i_sub = 0;
+
+    if (len <= 0 || pos > src.len - 1)
+        return false;
+    if (pos + len > src.len) {
+        sub->len = len = src.len - pos;
+    } else {
+        sub->len = len;
+    }
+
+    Block* psrc = src.head;
+    if(start>0){ //psrc移到复制开始的块
+        while(start>0){
+            psrc = psrc->next;
+            start--;
+        }
+    }
+
+    Block* psub = (Block*)malloc(sizeof(Block));
+    if (!psub)
+        return false;
+    psub->next = NULL;
+    sub->head = psub;
+
+    while(len > 0) { //复制字符
+		if (i_src == 4) {
+			psrc = psrc->next;
+			i_src = 0;
+		}
+		if (i_sub == 4) {
+			i_sub = 0;
+			Block* new = (Block*)malloc(sizeof(Block));
+			if (!new) //没有多余空间
+				return false;
+			psub->next = new;
+			psub = psub->next;
+			psub->next = NULL;
+    	}
+		psub->ch[i_sub++] = psrc->ch[i_src++]; //完成赋值后，进行自增
+		len--;
+	}
+	sub->tail = psub;
+	
+	if (i_sub < 4) {
+		while (i_sub < 4) { //填充空白
+			psub->ch[i_sub++] = '#'; //完成赋值后，进行自增
+		}
+	}
+
+    return true;
+}
