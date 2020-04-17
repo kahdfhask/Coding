@@ -1,0 +1,85 @@
+/*
+矩阵加法
+实现三元组表示的两个稀疏矩阵的加法。相关定义如下：
+#define MAXSIZE 100          //假设非零元个数的最大值为100
+typedef struct {
+    int i,j;						//非零元的行下标和列下标，i 和 j 从 1 开始计数，与数学中矩阵元素的编号一致
+    ElemType e;						//非零元的值
+}Triple;
+
+typedef struct {
+    Triple data[MAXSIZE];			// 非零元三元组表
+    int    m, n, len;				// 矩阵的行数、列数和非零元个数
+}TSMatrix;
+在三元组中，i 和 j 从 1 开始计数，与数学中矩阵元素的编号一致
+矩阵加法函数的原型为：
+bool add_matrix(const TSMatrix *pM, const TSMatrix *pN, TSMatrix *pQ);
+pM, pN, pQ 分别指向三个矩阵，当 pM 和 pN 两个矩阵不可加时，函数返回 false，否则函数返回 true，且 pQ 指向两个矩阵的和。
+*/
+
+#include "tsmatrix.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+void add(TSMatrix* pQ, int* i_Q, const Triple mat) //载入数据mat.e
+{
+    pQ->data[*i_Q].i = mat.i;
+    pQ->data[*i_Q].j = mat.j;
+    pQ->data[*i_Q].e = mat.e;
+}
+
+bool add_matrix(const TSMatrix* pM, const TSMatrix* pN, TSMatrix* pQ)
+{
+    int i_M = 0;
+    int i_N = 0;
+    int i_Q = 0;
+
+    if (pM->m != pN->m || pM->n != pN->n || pM->len > ((pM->m) * pM->n) || pN->len > ((pN->m) * (pN->n)) || pM->len > MAXSIZE || pN->len > MAXSIZE)
+        return false;
+
+    pQ->m = pM->m;
+    pQ->n = pM->n;
+    pQ->len = 0; //pQ的非零元个数
+
+    if (pM->len == 0 && pN->len == 0)
+        return true;
+
+    while(i_M<pM->len && i_N<pN->len && i_Q<MAXSIZE){
+        while(pM->data[i_M].e == 0 && i_M<pM->len) //跳过非零元
+            i_M++;
+        while(pN->data[i_N].e == 0 && i_N<pN->len) //跳过非零元
+            i_N++;
+        
+        if(pM->data[i_M].i < pN->data[i_N].i || (pM->data[i_M].i == pN->data[i_N].i && pM->data[i_M].j < pN->data[i_N].j)){ //pM待加非零元位置靠前
+            add(pQ, &i_Q, pM->data[i_M]);
+            i_Q++;i_M++;
+        }else if(pM->data[i_M].i > pN->data[i_N].i || (pM->data[i_M].i == pN->data[i_N].i && pM->data[i_M].j > pN->data[i_N].j)){ //pN待加非零元位置靠前
+            add(pQ, &i_Q, pN->data[i_N]);
+            i_Q++;i_N++;
+        }else{ //pM和pN同位置
+            if((pM->data[i_M].e + pN->data[i_N].e) != 0){ //和不为零，则相加
+                add(pQ, &i_Q, pM->data[i_M]);
+                pQ->data[i_Q].e += pN->data[i_N].e;
+                i_Q++;i_M++;i_N++;
+            }else{
+                i_M++;i_N++;
+            }
+        }
+    }
+
+    if (i_M < pM->len) {
+        while (i_M < pM->len && i_Q < MAXSIZE) {
+            add(pQ, &i_Q, pM->data[i_M]);
+            i_Q++;i_M++;
+        }
+    }else if(i_N < pN->len) {
+        while (i_N < pN->len && i_Q < MAXSIZE) {
+            add(pQ, &i_Q, pN->data[i_N]);
+            i_Q++;i_N++;
+        }
+    }
+
+    pQ->len = i_Q;
+
+    return true;
+}
