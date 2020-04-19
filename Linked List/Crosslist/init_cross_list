@@ -1,0 +1,87 @@
+//十字链表
+// 实现十字链表的初始化操作：
+//  int init_cross_list(PCrossList L, const ElemType *A, int m, int n);
+// 其中 L 指向 CrossList 结构，且各成员已被初始化为0；
+// A 为 ElemType 类型数组中第一个元素的地址，元素的个数为 m×n 个，按行优先存储（即A[0] 为十字链表第1行第1列的元素；
+// A[1] 为第1行第2列的元素，A[n] 为第2行第1列的元素，A[n+1] 为第2行第2个元素）；
+// m 表示十字链表的行数，n 表示十字链表的列数。
+// init_cross_list 函数将 ElemType 数组中非0元素保存到十字链表中，函数返回非 0 元素的个数。
+
+/*
+typedef int ElemType;
+
+// 非零元素结点结构
+typedef struct OLNode
+{
+    int row,col;
+    ElemType value;
+    struct OLNode *right,*down;
+}OLNode,*OLink;
+
+// 十字链表结构
+typedef struct
+{
+    OLink *rowhead,*colhead;
+    int rows,cols,nums;
+}CrossList, *PCrossList;
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "crosslist.h"
+#define false 1
+
+int init_cross_list(PCrossList L, const ElemType *A, int m,int n){
+    int row = 0; //*该十字链表colhead rowhead从下标0开始储存*
+    int col = 0;
+    int i = 0; //A元素的下标
+    int cnt = 1; //插入指针时上个结点所在行列数
+    OLNode* p;
+    OLNode* t; //便于插入
+    
+    if (!(L->rowhead = (OLink*)malloc((m+1) * sizeof(OLink))))
+        return false;
+    if (!(L->colhead = (OLink*)malloc((n+1) * sizeof(OLink))))
+        return false;
+    for(row = 0; row<m; row++)
+        L->rowhead[row] = NULL;
+    for(col = 0; col<n; col++)
+        L->colhead[col] = NULL;
+
+    L->rows = m;
+    L->cols = n;
+    L->nums = 0;
+
+    for(i = 0; i<m*n; i++){
+        if(A[i]!=0){
+            L->nums++;
+            row = i/n; //定位该有效元素的位置*该十字链表colhead rowhead从下标0开始储存*
+            col = i%n;
+        
+            p = (OLNode*)malloc(sizeof(OLNode));
+            p->row = row;
+            p->col = col;
+            p->value = A[i];
+            p->right = NULL;
+            p->down = NULL;
+
+            if(L->rowhead[row] == NULL){ //行
+                L->rowhead[row] = p;
+            }else{
+                for(t = L->rowhead[row]; t->right && t->right->col < col; t = t->right);
+                p->right = t->right;
+                t->right = p;
+            }
+            
+            if(L->colhead[col] == NULL){ //列
+                L->colhead[col] = p;
+            }else{
+                for(t = L->colhead[col]; t->down && t->down->row < row; t = t->down);
+                p->down = t->down;
+                t->down = p;
+            }
+        }
+    }
+
+    return L->nums;
+}

@@ -1,0 +1,93 @@
+//十字链表
+// 实现十字链表的删除操作：
+//  int del_cross_list(PCrossList L, ElemType k);
+// 其中 L 指向 要处理的 CrossList 结构，k 为要删除的元素；
+// del_cross_list 函数删除十字链表中所有值为 k 的结点，并返回删除结点的个数。
+
+/*
+typedef int ElemType;
+
+// 非零元素结点结构
+typedef struct OLNode
+{
+    int row,col;
+    ElemType value;
+    struct OLNode *right,*down;
+}OLNode,*OLink;
+
+// 十字链表结构
+typedef struct
+{
+    OLink *rowhead,*colhead;
+    int rows,cols,nums;
+}CrossList, *PCrossList;
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "crosslist.h"
+
+int del_cross_list(PCrossList L, ElemType k){
+    int del = 0;
+    int row = 0; //遍历的行数-1*该十字链表colhead rowhead从下标0开始储存*
+    int col = 0; //以免每行遍历越界
+    OLink p, p_left, p_up;
+
+    for(;row<L->rows; row++){ //遍历行
+        if(L->rowhead[row] == NULL)
+            continue;
+        p = L->rowhead[row];
+        for(col = 0; p && col<L->cols; p=p->right){ //遍历列
+            col++;
+            if(p->value == k){ //先修改该列前后指针，再修改该行前后指针
+                del++;
+                L->nums--;
+                if(L->colhead[p->col] == p){//p是该列指针指向的第一个指针，没上指针
+                    if(p->down) //p有下指针
+                        L->colhead[p->col] = p->down;
+                    else //p没有下指针
+                        L->colhead[p->col] = NULL;
+                }else{ //p有上指针
+                    p_up = L->colhead[p->col];
+                    while(p_up->down != p)
+                        p_up = p_up->down;
+                    if(p->down) //p有下指针
+                        p_up->down = p->down;
+                    else //p没有下指针
+                        p_up->down = NULL;
+                }
+
+                if(L->rowhead[row] == p){//p是该行指针指向的第一个指针，没左指针
+                    if(p->right){ //p有右指针
+                        L->rowhead[row] = p->right;
+                        free(p);
+                        p = L->rowhead[row]; //移动p
+                    }else{ //p没有右指针
+                        L->rowhead[row] = NULL;
+                        free(p);
+                        break;
+                    }
+                }else{ //p有左指针
+                    p_left = L->rowhead[row];
+                    while(p_left->right != p)
+                        p_left = p_left->right;
+                    if(p->right){ //p有右指针
+                        p_left->right = p->right;
+                        free(p);
+                        if(p_left->right == NULL){
+                            break;
+                        }else{
+                            p = p_left->right; //移动p
+                        }
+                    }else{ //p没有右指针
+                        p_left->right = NULL;
+                        free(p);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return del;
+}
