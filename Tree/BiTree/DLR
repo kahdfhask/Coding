@@ -1,0 +1,10 @@
+void PreOrder(BiTree root)
+{
+	if(root!=NULL)
+	{
+		Visit(root->data);
+		PreOrder(root->LChild);
+		PreOrder(root->RChild);
+	}
+
+}
