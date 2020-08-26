@@ -1,0 +1,9 @@
+void InOrder(BiTree root)
+{
+	if(root!=NULL)
+	{
+		InOrder(root->LChild);
+		Visit(root);
+		InOrder(root->RChild);
+	}
+}
