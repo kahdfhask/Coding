@@ -3,7 +3,7 @@ void InOrder(BiTree root)
 	if(root!=NULL)
 	{
 		InOrder(root->LChild);
-		Visit(root);
+		Visit(root->data);
 		InOrder(root->RChild);
 	}
 }

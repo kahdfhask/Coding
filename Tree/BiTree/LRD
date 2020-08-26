@@ -1,0 +1,9 @@
+void PostOrder(BiTree root)
+{
+	if(root!=NUll)
+	{
+		PostOrder(root->LChild);
+		PostOrder(root->RChild);
+		Visit(root->data);
+	}
+}
